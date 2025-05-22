@@ -1,0 +1,711 @@
+[
+    {
+        "id": "a30afba018f0280b",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "de71cc58086b83cc",
+        "type": "debug",
+        "z": "a30afba018f0280b",
+        "name": "DebugWindow",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1420,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "4fd6ccf5d85019a4",
+        "type": "csv",
+        "z": "a30afba018f0280b",
+        "name": "File parser",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "ProductID,ProductionLine,Temperature,Pressure,AssemblyTime,Sensor1Reading,Sensor2Reading,Sensor3Reading,OperatorExperience,Defective",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": true,
+        "x": 470,
+        "y": 480,
+        "wires": [
+            [
+                "8406568d84d6b427"
+            ]
+        ]
+    },
+    {
+        "id": "a82b8d0518ba1b43",
+        "type": "file in",
+        "z": "a30afba018f0280b",
+        "name": "CSV file reader",
+        "filename": "/data/train_data.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 460,
+        "y": 400,
+        "wires": [
+            [
+                "4fd6ccf5d85019a4"
+            ]
+        ]
+    },
+    {
+        "id": "8406568d84d6b427",
+        "type": "delay",
+        "z": "a30afba018f0280b",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "10",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": true,
+        "outputs": 1,
+        "x": 680,
+        "y": 500,
+        "wires": [
+            [
+                "12b90c8e215852a9",
+                "586618edd1180928"
+            ]
+        ]
+    },
+    {
+        "id": "feae24671c465a78",
+        "type": "inject",
+        "z": "a30afba018f0280b",
+        "name": "GO!",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "flowgate",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "60",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 90,
+        "y": 500,
+        "wires": [
+            [
+                "02f36a0538ce2d8f",
+                "5c5f8f1612b1801a"
+            ]
+        ]
+    },
+    {
+        "id": "a13e4fcdaddc2605",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Copy Msg to Flow for OPCUA",
+        "rules": [
+            {
+                "t": "set",
+                "p": "productID",
+                "pt": "flow",
+                "to": "payload.ProductID",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "productionLine",
+                "pt": "flow",
+                "to": "payload.ProductionLine",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "pressure",
+                "pt": "flow",
+                "to": "payload.Pressure",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "assemblyTime",
+                "pt": "flow",
+                "to": "payload.AssemblyTime",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor1Reading",
+                "pt": "flow",
+                "to": "payload.Sensor1Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor2Reading",
+                "pt": "flow",
+                "to": "payload.Sensor2Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor3Reading",
+                "pt": "flow",
+                "to": "payload.Sensor3Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "operatorExperience",
+                "pt": "flow",
+                "to": "payload.OperatorExperience",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "defective",
+                "pt": "flow",
+                "to": "payload.Defective",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1590,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38ce10de.7d8c",
+        "type": "opcua-compact-server",
+        "z": "a30afba018f0280b",
+        "port": "4840",
+        "endpoint": "",
+        "productUri": "",
+        "acceptExternalCommands": true,
+        "maxAllowedSessionNumber": "10",
+        "maxConnectionsPerEndpoint": "10",
+        "maxAllowedSubscriptionNumber": "100",
+        "alternateHostname": "",
+        "name": "OPC-UA-Compact-Server",
+        "showStatusActivities": false,
+        "showErrors": true,
+        "allowAnonymous": true,
+        "individualCerts": false,
+        "isAuditing": false,
+        "serverDiscovery": true,
+        "users": [],
+        "xmlsetsOPCUA": [],
+        "publicCertificateFile": "",
+        "privateCertificateFile": "",
+        "registerServerMethod": "1",
+        "discoveryServerEndpointUrl": "",
+        "capabilitiesForMDNS": "",
+        "maxNodesPerRead": 1000,
+        "maxNodesPerWrite": 1000,
+        "maxNodesPerHistoryReadData": 100,
+        "maxNodesPerBrowse": 3000,
+        "maxBrowseContinuationPoints": "10",
+        "maxHistoryContinuationPoints": "10",
+        "delayToInit": "1000",
+        "delayToClose": "200",
+        "serverShutdownTimeout": "100",
+        "addressSpaceScript": "function(server, addressSpace, eventObjects, done) {\n\n  // server = the created node-opcua server\n  // addressSpace = address space of the node-opcua server\n  // eventObjects = add event variables here to hold them in memory from this script\n\n  // internal sandbox objects are:\n  // node = the compact server node,\n  // coreServer = core compact server object for debug and access to NodeOPCUA\n  // this.sandboxNodeContext = node context node-red\n  // this.sandboxFlowContext = flow context node-red\n  // this.sandboxGlobalContext = global context node-red\n  // this.sandboxEnv = env variables\n  // timeout and interval functions as expected from nodejs\n\n  node.warn(\"Starting OPCUA Server\");\n\n  const opcua = coreServer.choreCompact.opcua;\n  //const LocalizedText = opcua.LocalizedText;\n  const namespace = addressSpace.getOwnNamespace();\n\n  const Variant = opcua.Variant;\n  const DataType = opcua.DataType;\n  const VariantArrayType = opcua.VariantArrayType;\n  const DataValue = opcua.DataValue;\n  const standardUnits = opcua.standardUnits;\n  var flexServerInternals = this;\n\n  // add flow variables\n  this.sandboxFlowContext.set(\"assemblyTime\", 0);\n  this.sandboxFlowContext.set(\"defective\", 0);\n  this.sandboxFlowContext.set(\"pressure\", 0);\n  this.sandboxFlowContext.set(\"productID\", 0);\n  this.sandboxFlowContext.set(\"productionLine\", \"\");\n  this.sandboxFlowContext.set(\"sensor1Reading\", 0);\n  this.sandboxFlowContext.set(\"sensor2Reading\", 0);\n  this.sandboxFlowContext.set(\"sensor3Reading\", 0);\n  this.sandboxFlowContext.set(\"operatorExperience\", 0);\n\n  //Define ISA-95 folder structure for UNS\n  coreServer.debugLog(\"init dynamic address space\");\n  const rootFolder = addressSpace.findNode(\"RootFolder\");\n  node.warn(\"construct new address space for OPC UA\");\n  const enterprise = namespace.addFolder(rootFolder.objects, { browseName: \"ACME\" });\n  const site = namespace.addFolder(enterprise, { browseName: \"Springfield\" });\n  const area = namespace.addFolder(site, { browseName: \"Extrusion\" });\n  const subsystem = namespace.addFolder(area, { browseName: \"Part1\" });\n\n  // getting variables from flow context\n  const assemblyTime = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"time\",\n    \"nodeId\": \"ns=1;s=Assembly_Time\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"assemblyTime\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"assemblyTime\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const defective = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"defect\",\n    \"nodeId\": \"ns=1;s=Defective\",\n    \"dataType\": \"Int16\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Int16,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"defective\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"defective\",\n          parseInt(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const pressure = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"pressure\",\n    \"nodeId\": \"ns=1;s=Pressure\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"pressure\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"pressure\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const productID = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"product\",\n    \"nodeId\": \"ns=1;s=Product_ID\",\n    \"dataType\": \"Int16\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Int16,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"productID\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"productID\",\n          parseInt(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const productionLine = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"line\",\n    \"nodeId\": \"ns=1;s=production_Line\",\n    \"dataType\": \"String\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.String,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"productionLine\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"productionLine\",\n          String(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor1Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor1\",\n    \"nodeId\": \"ns=1;s=Sensor1_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor1Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor1Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor2Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor2\",\n    \"nodeId\": \"ns=1;s=Sensor2_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor2Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor2Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor3Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor3\",\n    \"nodeId\": \"ns=1;s=Sensor3_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor3Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor3Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n\n  const operatorExperience = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"experience\",\n    \"nodeId\": \"ns=1;s=Operator_Experience\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"operatorExperience\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"operatorExperience\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  //------------------------------------------------------------------------------\n  // Add a view\n  //------------------------------------------------------------------------------\n  const view = namespace.addView({\n    organizedBy: rootFolder.views,\n    browseName: \"MyView\"\n  });\n\n  view.addReference({\n    referenceType: \"Organizes\",\n    nodeId: defective.nodeId\n  });\n\n  coreServer.debugLog(\"create dynamic address space done\");\n  node.warn(\"Construction of new address space for OPC UA done\");\n  done();\n}",
+        "x": 690,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "255c0cfa86724ff6",
+        "type": "flowgate",
+        "z": "a30afba018f0280b",
+        "name": "Stop flow if failure msg",
+        "bypass": false,
+        "outputs": 1,
+        "active": true,
+        "x": 1060,
+        "y": 500,
+        "wires": [
+            [
+                "de71cc58086b83cc",
+                "da8dd3508b3e6dab"
+            ]
+        ],
+        "info": "added bypass output, to send out even the possibly lost message (the one containing the 10 defect in a row)"
+    },
+    {
+        "id": "7e403546f948407a",
+        "type": "switch",
+        "z": "a30afba018f0280b",
+        "name": "Part defect?",
+        "property": "payload.Defective",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "neq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 630,
+        "y": 720,
+        "wires": [
+            [
+                "694ec8320beddfce"
+            ],
+            [
+                "255c0cfa86724ff6"
+            ]
+        ]
+    },
+    {
+        "id": "694ec8320beddfce",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Update flow vars",
+        "rules": [
+            {
+                "t": "set",
+                "p": "numDefects",
+                "pt": "flow",
+                "to": "$number($flowContext(\"numDefects\"))+1",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 780,
+        "wires": [
+            [
+                "e958efe68d2ef37c"
+            ]
+        ]
+    },
+    {
+        "id": "02f36a0538ce2d8f",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Set init flow vars",
+        "rules": [
+            {
+                "t": "set",
+                "p": "numDefects",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "limitDefects",
+                "pt": "flow",
+                "to": "10",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "failure.status",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "failure.time",
+                "pt": "flow",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "numParts",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 200,
+        "y": 620,
+        "wires": [
+            [
+                "a82b8d0518ba1b43"
+            ]
+        ]
+    },
+    {
+        "id": "e958efe68d2ef37c",
+        "type": "switch",
+        "z": "a30afba018f0280b",
+        "name": "Limit reached?",
+        "property": "numDefects",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "limitDefects",
+                "vt": "flow"
+            },
+            {
+                "t": "lt",
+                "v": "limitDefects",
+                "vt": "flow"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 640,
+        "y": 840,
+        "wires": [
+            [
+                "f4b93dd314edd3bc",
+                "a13e4fcdaddc2605"
+            ],
+            [
+                "255c0cfa86724ff6"
+            ]
+        ]
+    },
+    {
+        "id": "f4b93dd314edd3bc",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Enable SHUTDOWN",
+        "rules": [
+            {
+                "t": "set",
+                "p": "failure.status",
+                "pt": "flow",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "failure.time",
+                "pt": "flow",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 900,
+        "wires": [
+            [
+                "161c417c6169d153",
+                "ce445e30e101b15b"
+            ]
+        ]
+    },
+    {
+        "id": "161c417c6169d153",
+        "type": "trigger",
+        "z": "a30afba018f0280b",
+        "name": "Trigger disabled flow",
+        "op1": "false",
+        "op2": "true",
+        "op1type": "bool",
+        "op2type": "bool",
+        "duration": "60",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 940,
+        "y": 780,
+        "wires": [
+            [
+                "b54ae262ed99660f",
+                "2ce7f64061f860ae"
+            ]
+        ]
+    },
+    {
+        "id": "b54ae262ed99660f",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Transcode",
+        "rules": [
+            {
+                "t": "set",
+                "p": "flowgate",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 970,
+        "y": 660,
+        "wires": [
+            [
+                "255c0cfa86724ff6"
+            ]
+        ]
+    },
+    {
+        "id": "da8dd3508b3e6dab",
+        "type": "switch",
+        "z": "a30afba018f0280b",
+        "name": "Is SHUTDOWN?",
+        "property": "failure.status",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1150,
+        "y": 560,
+        "wires": [
+            [
+                "a13e4fcdaddc2605"
+            ],
+            [
+                "8fc2755743ea0dc1",
+                "2ee290c274f4c305"
+            ]
+        ]
+    },
+    {
+        "id": "8fc2755743ea0dc1",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Reset Flow vars",
+        "rules": [
+            {
+                "t": "set",
+                "p": "failure.status",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "numDefects",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "failure.time",
+                "pt": "flow",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1200,
+        "y": 620,
+        "wires": [
+            [
+                "a13e4fcdaddc2605"
+            ]
+        ]
+    },
+    {
+        "id": "5c5f8f1612b1801a",
+        "type": "debug",
+        "z": "a30afba018f0280b",
+        "name": "Console",
+        "active": true,
+        "tosidebar": false,
+        "console": true,
+        "tostatus": false,
+        "complete": "\"System started!\"",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 210,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "12b90c8e215852a9",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Count parts",
+        "rules": [
+            {
+                "t": "set",
+                "p": "numParts",
+                "pt": "flow",
+                "to": "$number($flowContext(\"numParts\"))+1",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 660,
+        "wires": [
+            [
+                "7e403546f948407a"
+            ]
+        ]
+    },
+    {
+        "id": "2ce7f64061f860ae",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Huge delay",
+        "rules": [
+            {
+                "t": "set",
+                "p": "rate",
+                "pt": "msg",
+                "to": "10000000",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 560,
+        "wires": [
+            [
+                "8406568d84d6b427"
+            ]
+        ],
+        "info": "change rate of messages sent to something super high not to lose any message in queue"
+    },
+    {
+        "id": "2ee290c274f4c305",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "Reset rate",
+        "rules": [
+            {
+                "t": "set",
+                "p": "rate",
+                "pt": "msg",
+                "to": "10000",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1210,
+        "y": 720,
+        "wires": [
+            [
+                "8406568d84d6b427"
+            ]
+        ]
+    },
+    {
+        "id": "586618edd1180928",
+        "type": "debug",
+        "z": "a30afba018f0280b",
+        "name": "Console",
+        "active": true,
+        "tosidebar": false,
+        "console": true,
+        "tostatus": false,
+        "complete": "\"Processing part \" & $flowContext(\"numParts\")",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ce445e30e101b15b",
+        "type": "debug",
+        "z": "a30afba018f0280b",
+        "name": "Console",
+        "active": true,
+        "tosidebar": false,
+        "console": true,
+        "tostatus": false,
+        "complete": "\"!!WARNING!! Production shutdown at \" & $fromMillis($flowContext(\"failure.time\"))",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 940,
+        "wires": []
+    }
+]

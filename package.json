@@ -1,0 +1,14 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "node-opcua": "^2.153.0",
+        "node-opcua-client": "^2.153.0",
+        "node-red-contrib-opcua-server": "~1.1.1"
+    },
+    "scripts": {
+        "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS"
+    }
+}

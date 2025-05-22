@@ -1,0 +1,246 @@
+[
+    {
+        "id": "a30afba018f0280b",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "de71cc58086b83cc",
+        "type": "debug",
+        "z": "a30afba018f0280b",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "4fd6ccf5d85019a4",
+        "type": "csv",
+        "z": "a30afba018f0280b",
+        "name": "Train file parser",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "ProductID,ProductionLine,Temperature,Pressure,AssemblyTime,Sensor1Reading,Sensor2Reading,Sensor3Reading,OperatorExperience,Defective",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": true,
+        "x": 640,
+        "y": 500,
+        "wires": [
+            [
+                "8406568d84d6b427"
+            ]
+        ]
+    },
+    {
+        "id": "a82b8d0518ba1b43",
+        "type": "file in",
+        "z": "a30afba018f0280b",
+        "name": "CSV file reader",
+        "filename": "/data/train_data.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 440,
+        "y": 500,
+        "wires": [
+            [
+                "4fd6ccf5d85019a4"
+            ]
+        ]
+    },
+    {
+        "id": "8406568d84d6b427",
+        "type": "delay",
+        "z": "a30afba018f0280b",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "10",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 820,
+        "y": 500,
+        "wires": [
+            [
+                "de71cc58086b83cc",
+                "a13e4fcdaddc2605"
+            ]
+        ]
+    },
+    {
+        "id": "feae24671c465a78",
+        "type": "inject",
+        "z": "a30afba018f0280b",
+        "name": "GO!",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 230,
+        "y": 500,
+        "wires": [
+            [
+                "a82b8d0518ba1b43"
+            ]
+        ]
+    },
+    {
+        "id": "a13e4fcdaddc2605",
+        "type": "change",
+        "z": "a30afba018f0280b",
+        "name": "store stream data",
+        "rules": [
+            {
+                "t": "set",
+                "p": "productID",
+                "pt": "flow",
+                "to": "payload.ProductID",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "productionLine",
+                "pt": "flow",
+                "to": "payload.ProductionLine",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "pressure",
+                "pt": "flow",
+                "to": "payload.Pressure",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "assemblyTime",
+                "pt": "flow",
+                "to": "payload.AssemblyTime",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor1Reading",
+                "pt": "flow",
+                "to": "payload.Sensor1Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor2Reading",
+                "pt": "flow",
+                "to": "payload.Sensor2Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "sensor3Reading",
+                "pt": "flow",
+                "to": "payload.Sensor3Reading",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "operatorExperience",
+                "pt": "flow",
+                "to": "payload.OperatorExperience",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "defective",
+                "pt": "flow",
+                "to": "payload.Defective",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1090,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38ce10de.7d8c",
+        "type": "opcua-compact-server",
+        "z": "a30afba018f0280b",
+        "port": "4840",
+        "endpoint": "",
+        "productUri": "",
+        "acceptExternalCommands": true,
+        "maxAllowedSessionNumber": "10",
+        "maxConnectionsPerEndpoint": "10",
+        "maxAllowedSubscriptionNumber": "100",
+        "alternateHostname": "",
+        "name": "",
+        "showStatusActivities": false,
+        "showErrors": true,
+        "allowAnonymous": true,
+        "individualCerts": false,
+        "isAuditing": false,
+        "serverDiscovery": true,
+        "users": [],
+        "xmlsetsOPCUA": [],
+        "publicCertificateFile": "",
+        "privateCertificateFile": "",
+        "registerServerMethod": "1",
+        "discoveryServerEndpointUrl": "",
+        "capabilitiesForMDNS": "",
+        "maxNodesPerRead": 1000,
+        "maxNodesPerWrite": 1000,
+        "maxNodesPerHistoryReadData": 100,
+        "maxNodesPerBrowse": 3000,
+        "maxBrowseContinuationPoints": "10",
+        "maxHistoryContinuationPoints": "10",
+        "delayToInit": "1000",
+        "delayToClose": "200",
+        "serverShutdownTimeout": "100",
+        "addressSpaceScript": "function(server, addressSpace, eventObjects, done) {\n\n  // server = the created node-opcua server\n  // addressSpace = address space of the node-opcua server\n  // eventObjects = add event variables here to hold them in memory from this script\n\n  // internal sandbox objects are:\n  // node = the compact server node,\n  // coreServer = core compact server object for debug and access to NodeOPCUA\n  // this.sandboxNodeContext = node context node-red\n  // this.sandboxFlowContext = flow context node-red\n  // this.sandboxGlobalContext = global context node-red\n  // this.sandboxEnv = env variables\n  // timeout and interval functions as expected from nodejs\n\n  node.warn(\"Starting OPCUA Server\");\n\n  const opcua = coreServer.choreCompact.opcua;\n  //const LocalizedText = opcua.LocalizedText;\n  const namespace = addressSpace.getOwnNamespace();\n\n  const Variant = opcua.Variant;\n  const DataType = opcua.DataType;\n  const VariantArrayType = opcua.VariantArrayType;\n  const DataValue = opcua.DataValue;\n  const standardUnits = opcua.standardUnits;\n  var flexServerInternals = this;\n\n  // add flow variables\n  this.sandboxFlowContext.set(\"assemblyTime\", 0);\n  this.sandboxFlowContext.set(\"defective\", 0);\n  this.sandboxFlowContext.set(\"pressure\", 0);\n  this.sandboxFlowContext.set(\"productID\", 0);\n  this.sandboxFlowContext.set(\"productionLine\", \"\");\n  this.sandboxFlowContext.set(\"sensor1Reading\", 0);\n  this.sandboxFlowContext.set(\"sensor2Reading\", 0);\n  this.sandboxFlowContext.set(\"sensor3Reading\", 0);\n  this.sandboxFlowContext.set(\"operatorExperience\", 0);\n\n  //Define ISA-95 folder structure for UNS\n  coreServer.debugLog(\"init dynamic address space\");\n  const rootFolder = addressSpace.findNode(\"RootFolder\");\n  node.warn(\"construct new address space for OPC UA\");\n  const enterprise = namespace.addFolder(rootFolder.objects, { browseName: \"ACME\" });\n  const site = namespace.addFolder(enterprise, { browseName: \"Springfield\" });\n  const area = namespace.addFolder(site, { browseName: \"Extrusion\" });\n  const subsystem = namespace.addFolder(area, { browseName: \"Part1\" });\n\n  // getting variables from flow context\n  const assemblyTime = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"time\",\n    \"nodeId\": \"ns=1;s=Assembly_Time\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"assemblyTime\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"assemblyTime\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const defective = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"defect\",\n    \"nodeId\": \"ns=1;s=Defective\",\n    \"dataType\": \"Int16\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Int16,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"defective\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"defective\",\n          parseInt(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const pressure = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"pressure\",\n    \"nodeId\": \"ns=1;s=Pressure\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"pressure\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"pressure\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const productID = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"product\",\n    \"nodeId\": \"ns=1;s=Product_ID\",\n    \"dataType\": \"Int16\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Int16,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"productID\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"productID\",\n          parseInt(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const productionLine = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"line\",\n    \"nodeId\": \"ns=1;s=production_Line\",\n    \"dataType\": \"String\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.String,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"productionLine\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"productionLine\",\n          String(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor1Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor1\",\n    \"nodeId\": \"ns=1;s=Sensor1_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor1Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor1Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor2Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor2\",\n    \"nodeId\": \"ns=1;s=Sensor2_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor2Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor2Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  const sensor3Reading = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"sensor3\",\n    \"nodeId\": \"ns=1;s=Sensor3_Reading\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"sensor3Reading\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"sensor3Reading\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n\n  const operatorExperience = namespace.addVariable({\n    \"organizedBy\": subsystem,\n    \"browseName\": \"experience\",\n    \"nodeId\": \"ns=1;s=Operator_Experience\",\n    \"dataType\": \"Double\",\n    \"value\": {\n      \"get\": function () {\n        return new Variant({\n          \"dataType\": DataType.Double,\n          \"value\": flexServerInternals.sandboxFlowContext.get(\"operatorExperience\")\n        });\n      },\n      \"set\": function (variant) {\n        flexServerInternals.sandboxFlowContext.set(\n          \"operatorExperience\",\n          parseFloat(variant.value)\n        );\n        return opcua.StatusCodes.Good;\n      }\n    }\n  });\n\n  //------------------------------------------------------------------------------\n  // Add a view\n  //------------------------------------------------------------------------------\n  const view = namespace.addView({\n    organizedBy: rootFolder.views,\n    browseName: \"MyView\"\n  });\n\n  view.addReference({\n    referenceType: \"Organizes\",\n    nodeId: defective.nodeId\n  });\n\n  coreServer.debugLog(\"create dynamic address space done\");\n  node.warn(\"Construction of new address space for OPC UA done\");\n  done();\n}",
+        "x": 740,
+        "y": 320,
+        "wires": []
+    }
+]
