@@ -17,7 +17,10 @@ WORKDIR /usr/src/node-red
 COPY node-red-data/settings.js /data/settings.js
 # not needed for this example
 #COPY node-red-data/flows_cred.json /data/flows_cred.json
-COPY node-red-data/flows.json /data/flows.json
+
+COPY flows-autostart.json /data/flows.json
+# Flow with autoshutdown
+#COPY flows-autostart-shutdown.json /data/flows.json
 
 # expose OPCUA Server port
 EXPOSE 1880 4840
