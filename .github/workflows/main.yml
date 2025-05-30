@@ -23,11 +23,14 @@ jobs:
         uses: redhat-actions/buildah-build@main
         with:
           containerfile: ./Containerfile
-          tags: "quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server:latest"
+          image: "quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server" 
+          tags: latest
 
       - name: Push the image to Quay.io
         uses: redhat-actions/push-to-registry@main
         with:
-          image: quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server:latest
+          registry: "quay.io/${{ secrets.QUAY_ORG }}"
+          image: edge-manufacturing-server
+          tags: latest
           username: ${{ secrets.QUAY_USER }}
           password: ${{ secrets.QUAY_PASS }}
