@@ -1,0 +1,32 @@
+name: Build and Push to Quay.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Quay.io
+        uses: redhat-actions/podman-login@main
+        with:
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_PASS }}
+
+      - name: Build the image
+        uses: redhat-actions/buildah-build@main
+        with:
+          containerfile: ./Containerfile
+          tags: "quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server:latest"
+
+      - name: Push the image to Quay.io
+        uses: redhat-actions/push-to-registry@main
+        with:
+          image: quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server:latest
+          username: ${{ secrets.QUAY_USER }}
+          password: ${{ secrets.QUAY_PASS }}
