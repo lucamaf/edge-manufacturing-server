@@ -22,7 +22,7 @@ jobs:
       - name: Build the image
         uses: redhat-actions/buildah-build@main
         with:
-          containerfile: ./Containerfile
+          containerfiles: ./Containerfile
           image: "quay.io/${{ secrets.QUAY_ORG }}/edge-manufacturing-server" 
           tags: latest
 
